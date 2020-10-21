@@ -3,54 +3,59 @@ from datashop.datashop import *
 
 class Feature:
     
-    def __init__(self,series,name):
+    def __init__(self,series,name = None, auto_cat = True):
         
         self.series = series
-        self.name = name
+        if name == None:
+            self.name = self.series.name
+        else:
+            self.name = name
         self.feature_type = 'default'
         self.report = pd.Series()
         self.desc = self.series.describe()
         
         self.null_count = self.series.isna().sum()
-        self.null_percent = round((self.null_count/len(self.series))*100,2)
+        self.null_percent = round((self.null_count/len(self.series))*100,2)       
         
-        self.types = self.series.dropna().apply(
-            lambda x: type(x).__name__)
-        self.type_counts = self.types.value_counts()
+        
         
         self.val_counts = self.series.value_counts()
         self.cat_ratio = len(self.val_counts)/len(self.series)
-        self.cat_threshold = 0.20           
-            
+        self.cat_threshold = 0.20  
+
+        if self.cat_ratio < self.cat_threshold and auto_cat == False:
+            self.report['Possibly Categorical?'] = 'Yes'    
+        else:
+            self.report['Possibly Categorical?'] = 'No'                      
         self.report['Length'] = len(self.series)
         self.report['Values'] = self.series.count()
         self.report['Missing']= str(self.null_count) +'({})%'.format(self.null_percent)
-        self.report['Unique'] = len(self.val_counts)
-        
+        self.report['Unique'] = len(self.val_counts)     
+    
+        self.types = self.series.dropna().apply(
+            lambda x: type(x).__name__)
+        self.type_counts = self.types.value_counts()
+
         self.type_map = {
             'str':self.StringFeature,
             'int':self.NumericFeature,
             'float':self.NumericFeature,
             'datetime64':self.DateFeature,
             'datetime32':self.DateFeature,
-            'category':self.Categorical
         }
-        
+                          
         if len(self.type_counts) > 1:
             self.Categorical()
         elif isinstance(
             self.series.index,pd.core.indexes.datetimes.DatetimeIndex):
-            self.DateFeature()
+            self.TimeSeries()
+        elif self.cat_ratio < self.cat_threshold and auto_cat == True:
+            self.Categorical()
         elif len(self.type_counts.index) == 0:
             print("{} is empty".format(self.name))
         else:
-            self.type_map[str(self.type_counts.index[0])]()
-        
-        
-        if self.cat_ratio < self.cat_threshold:
-            self.report['Possibly Categorical?'] = 'Yes'  
-        else:
-            self.report['Possibly Categorical?'] = 'No'  
+            self.type_map[str(self.type_counts.index[0])]()      
+               
             
     def NumericFeature(self):
         
@@ -121,7 +126,7 @@ class Feature:
                     ]
                 }
       
-    def DateFeature(self):
+    def TimeSeries(self):
         
         self.feature_type = 'date'
 
@@ -145,41 +150,49 @@ class Feature:
                 }
                 ]
             }
+
+    
+
     
     def Categorical(self):
 
-        self.feature_type = 'categorical'
-        
-        display(self.report)
-        
+        self.feature_type = 'categorical'       
         self.series = self.series.astype('category')
+        
         
         self.plot_map = {
             'figure':{
-                        'figsize':[12,.75*len(self.val_counts)],
-                        'grid_size':[12,12]
+                        'figsize':[.20*len(self.val_counts),10,],
+                        'grid_size':[int(round(.20*len(self.val_counts))),10]
                         },
             'plots':[
                 {
-                'type':self.box_plot,
-                'data':self.series,
-                'location':[slice(0,2),slice(None)]
+                'type':self.bar_plot,
+                'data':self.val_counts,
+                'location':[slice(None),slice(None)]
                 }
                 ]
             }
+
         
+    
+    def DateFeature(self):
+        self.report["Possible Time Series?"] = 'Yes'
+        self.report["Earliest Date"] = self.series.min()
+        self.report["Latest Date"] = self.series.max()
+
     def bar_plot(self,series,grid_loc):
         
         self.bar_chart = self.fig.add_subplot(grid_loc)
         self.bar_chart.bar(
-            list(series.index),
-            series,
+            list(series.head(self.cap).index),
+            series.head(self.cap),
             width=0.7)
         self.bar_chart.tick_params(
                     axis='x', 
                     labelrotation=55,
                     length=10,
-                    labelsize= 10
+                    labelsize= 12
                     )
         
     def box_plot(self,series,grid_loc):
@@ -217,8 +230,12 @@ class Feature:
                 (value,max(self.n) *.9)
             )
             
-    def show_report(self,show_charts = True):
-        
+    def show_report(self,show_charts = True, cap = 25):
+
+        self.cap = cap       
+        if len(self.val_counts) < self.cap:
+            self.cap = len(self.val_counts)
+
         display(self.report)
         
         if show_charts:       

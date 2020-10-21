@@ -9,6 +9,7 @@ import plotly as ply
 import random
 import scipy.stats as stats
 
+
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -22,3 +23,5 @@ from sklearn.decomposition import NMF
 from sklearn.feature_extraction import text
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import make_scorer
+
+from statsmodels.tsa.seasonal import seasonal_decompose 
