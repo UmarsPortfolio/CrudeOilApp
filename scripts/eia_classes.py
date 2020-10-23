@@ -49,7 +49,7 @@ class EIA_Series:
         self.frame.set_index(
             self.date_col,drop=True,inplace=True)
 
-        
+        self.frame = self.frame.asfreq(freq='B').fillna(method='ffill')
             
         self.frame.sort_index(ascending=True,inplace=True)
 

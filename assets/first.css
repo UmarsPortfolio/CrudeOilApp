@@ -1,0 +1,75 @@
+body{
+    background-color: #252526;
+}
+
+#main_div{
+    background-color: #252526;
+    padding: 0px;
+    border-style: none;
+   
+}
+
+
+#title_div {
+    background-color:#323233 ;
+    height: 200px;
+    border-style:none;
+    font-size: 30px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    line-height: 200px;
+    color:  #ebe8e8;
+ 
+}
+
+
+
+.custom-tabs-container {
+    color: #1f1e1e;
+    height: 40px;
+}
+
+.custom-tabs {
+    border-top-left-radius: 3px;
+    background-color: #1f1e1e;
+    padding: 0px;
+
+}
+
+#tabs-content{
+    background-color: #252526;
+    clear: both
+}
+
+#main_content{
+        background-color:#252526 ;
+        color: #cecccc;
+        width: 700px;
+        margin-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
+        font-family: sans-serif;
+
+    }
+
+#welc_span{
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 50px ;
+    align-items: center;
+    height: 100px;
+    margin:auto;
+    font-size: xx-large;
+    font-family: Impact;
+}
+
+#welc_body{
+    text-align: center;
+}
+
+
+
+
+
+
