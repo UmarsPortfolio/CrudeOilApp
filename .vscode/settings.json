@@ -1,3 +1,12 @@
 {
-    "python.pythonPath": "C:\\Users\\umark\\anaconda3\\python.exe"
+    "python.pythonPath": "C:\\Users\\umark\\anaconda3\\python.exe",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "EnergyDashConn",
+            "database": "${workspaceFolder:CrudeOilApp}/data/energydash.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }

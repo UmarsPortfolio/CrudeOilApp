@@ -38,7 +38,7 @@ body{
 
 #tabs-content{
     background-color: #252526;
-    clear: both
+    height: 80vh
 }
 
 #main_content{
@@ -68,8 +68,92 @@ body{
     text-align: center;
 }
 
+#main-graph {
+    background-color:#252526  ;
+    height: 80vh
+}
+
+#graph_div {
+    background-color: #252526 ;
+    height: 80vh;
+    widht:100%
+}
+
+#output {
+    height: 80vh
+}
+#controls_div{
+    width:100%;
+    height: 40px;
+    background-color:#cecccc ;
+}
+#date_div {
+    width: 8cm;
+    float: left;
+    background-color: #cecccc;
+    height: 45px;
+    border-style:none;
+    font-size: 25px;
+    font-family: Helvetica,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: left;
+    color: #252526 
+ 
+
+}
 
 
 
+.DateRangePickerInput{
+    background-color: #cecccc;
+    border-style: none;
+    width: 100%;
+}
+.DateInput_input {
+    font-size: 18px;
+    font-weight: 500;
+    width:100%,
+    font-family: 'Roboto Condensed', Helvetica, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    background-color: #cecccc;
+    height:40px;
+    border-style: none;
+    text-align: center;
+}
+
+#series_div {
+    width:17cm;
+    float:left;
+    background-color: #cecccc;
+    height:35px;
+    padding-top: 10px;
+    padding-left:1%
+
+  
+}
+
+.check_label{
+    font-family: 'Arial Narrow Bold', sans-serif;
+    font-size: 18px;
+    margin: 15px;
+
+}
 
 
+.gen_butt {
+    width: 2.5cm;
+    float: right;
+    right:2px;
+    margin-top: 2px;
+    margin-left: 2px;
+    height:36px;
+    background-color: #1f1e1e ;
+    border: none;
+    color:#cecccc;
+    font-size: 18px;
+    font-family:'Impact','Oswald','Roboto Condensed',Helvetica, Haettenschweiler, 'Arial Narrow Bold' ;
+    text-align: center;
+    float:left;
+
+
+
+    
+}

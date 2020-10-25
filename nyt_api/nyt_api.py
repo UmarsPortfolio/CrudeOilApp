@@ -1,6 +1,8 @@
-from datashop import*
 from pprint import pprint as pp
 import requests
+import pandas as pd
+import json
+
 
 
 import json
@@ -57,6 +59,7 @@ def parse_docs(docs):
             'print_headline':doc['headline']['print_headline'],
             'keywords':doc['keywords'],
             'newsdesk':doc['news_desk'],
+            'url':doc['web_url']
             
             
 

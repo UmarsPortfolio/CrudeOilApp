@@ -49,7 +49,7 @@ class EIA_Series:
         self.frame.set_index(
             self.date_col,drop=True,inplace=True)
 
-        self.frame = self.frame.asfreq(freq='B').fillna(method='ffill')
+        
             
         self.frame.sort_index(ascending=True,inplace=True)
 
@@ -59,6 +59,8 @@ class EIA_Series:
         self.frame['delta_'+self.name] = self.frame[self.name].diff()
         self.frame['rolling_'+self.name] = self.frame[self.name].rolling(window=50).mean()
         self.scaled = self.frame['scaled_'+self.name]
+
+        self.frame = self.frame.asfreq(freq='B').fillna(method='ffill')
         
 
     def chart(self):
@@ -84,9 +86,9 @@ class Depot:
 
         if len(self.features) == 0:
             self.originals = self.feature.frame[self.feature.name]
-            self.scaled = self.feature.frame['scaled_'+ self.feature.name]
-            self.deltas = self.feature.frame['delta_'+ self.feature.name]
-            self.rolling = self.feature.frame['rolling_'+ self.feature.name]
+            self.scaled = self.feature.frame[self.feature.name]
+            self.deltas = self.feature.frame[self.feature.name]
+            self.rolling = self.feature.frame[self.feature.name]
 
         else:
             self.originals = pd.merge_asof(

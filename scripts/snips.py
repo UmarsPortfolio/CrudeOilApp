@@ -106,3 +106,17 @@ def parse_docs(docs):
     frame = pd.DataFrame(doc_list)
     return frame    
 
+########## DASH DAT DIVS
+
+html.Div(
+            id='date_div',
+            children=date_selector
+        ),
+        html.Div(
+            id='series_div',
+            children = [series_selector]
+        ),
+        html.Div(
+            id='series_div',
+            children = [series_selector]
+        )
