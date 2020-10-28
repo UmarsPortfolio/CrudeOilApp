@@ -12,6 +12,8 @@ import pandas as pd
 import dash_dangerously_set_inner_html as ds
 from datashop.datashop import df_scaler
 from datashop.datashop import min_max_col
+import dash_table
+import dash_bootstrap_components as dbc
 
 #july 22 test
 
@@ -68,11 +70,14 @@ def render_content(tab):
         return welcome_tab
     
     elif tab == 'report':
-        return html.Iframe(srcDoc='/tab_main.html')
+        return report
 
     elif tab == 'chart':
 
         return chart
+    
+    
+
 
 @app.callback (Output(component_id='main-graph',component_property='figure'),
                 [Input(component_id='generate',component_property='n_clicks')],

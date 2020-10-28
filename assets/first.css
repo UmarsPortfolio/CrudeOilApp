@@ -38,9 +38,14 @@ body{
 
 #tabs-content{
     background-color: #252526;
-    height: 80vh
+    margin: auto;
+    height: 60vh
 }
 
+#main-graph{
+    height:70vh;
+    width:100%
+}
 #main_content{
         background-color:#252526 ;
         color: #cecccc;
@@ -66,17 +71,59 @@ body{
 
 #welc_body{
     text-align: center;
+    
 }
 
-#main-graph {
-    background-color:#252526  ;
-    height: 80vh
+#reportdiv {
+    width:1000px;
+    margin: auto
 }
+#newsbar{
+    background-color:  #252526;
+    color:  #cecccc;
+    height:24px
+}
+
+#newstitle{
+    width:200px;
+    background-color:  #252526;
+    color:  #cecccc;
+    float: left;
+    font-size: 20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#newsupdate{
+    width:250px;
+    background-color:  #252526;
+    color:  #cecccc;
+    float: right;
+    font-size: 12px;
+    font-family: Helvetica,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: 'italic';
+    text-align: right;
+    padding-top: 6px;
+}
+
+.newstable{
+
+    background-color: #cecccc;
+    border-style:none;
+    font-size: 12px;
+    font-family: Helvetica,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: left;
+    color: #252526 
+}
+
+#newssection{
+ 
+}
+
 
 #graph_div {
     background-color: #252526 ;
     height: 80vh;
-    widht:100%
+    width:100%
 }
 
 #output {

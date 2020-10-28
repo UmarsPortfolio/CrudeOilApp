@@ -11,6 +11,10 @@ import dash_dangerously_set_inner_html as ds
 from datetime import datetime,timedelta
 import pandas as pd
 from datashop.datashop import df_scaler
+import dash_table
+import dash_bootstrap_components as dbc
+import json
+
 ###################################             pseudo-css
 
 tab_style = {
@@ -121,7 +125,57 @@ welcome_tab=html.Div(
             id='main_content'
             )
 
-##################     CHart
+##############_____________     REPORT      _____________#######################
+with open ('data/cache.json','r') as cache_file:
+    cache_dict = json.load(cache_file)
+
+news_update = cache_dict['news_update']
+
+conn = sqlite3.connect('data/energydash.db')
+
+query = 'SELECT date,abstract,url FROM news ORDER BY date DESC LIMIT 10'
+
+df_news = pd.read_sql_query(query,conn)
+
+def makelink(url):
+    link = html.A(html.P('Full Article'),href=url,target = '_blank')
+    return link
+    
+df_news['hlinks']= df_news['url'].apply(makelink)
+df_news.drop('url',axis=1,inplace= True)
+
+news_bar = html.Div(
+    children=[
+        html.Span(
+            'Recent News',
+            id='newstitle'
+        ),
+        html.Span(
+            'Last Updated: ' + str(news_update),
+            id='newsupdate'
+        )
+    ],
+    id='newsbar'
+)
+
+news_table = dbc.Table.from_dataframe(
+    df_news,
+    id='newstable',
+    className = 'newstable'
+)
+
+news_section = html.Div(
+    children=[news_bar,news_table],
+    id='newssection'
+)
+
+report=html.Div(
+    id='reportdiv',
+    children=[news_section]
+)
+
+
+################_____________     CHART      _____________#######################
 
 
 start_date = str(datetime.now() - timedelta(90))[:10]
