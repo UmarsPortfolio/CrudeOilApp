@@ -250,13 +250,12 @@ date_selector = dcc.DatePickerRange(
             className='date_div'
             )
 
-series_selector = dcc.Checklist(
+series_selector = dcc.Dropdown(
             id='series_div',
             options=checkoptions,
             value=['Daily Price'],
             className = 'series_div',
-            inputClassName = 'input',
-            labelClassName = 'check_label'
+            multi = True
             )
 
 gen_button = html.Button(

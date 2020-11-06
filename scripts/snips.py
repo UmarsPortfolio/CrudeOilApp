@@ -120,3 +120,60 @@ html.Div(
             id='series_div',
             children = [series_selector]
         )
+
+
+#______________
+
+daily_price = EIA_Series('Daily Price','PET.RWTC.D')
+dep.ingest(daily_price)
+
+desc = ''
+daily_production = EIA_Series('Weekly Stocks','PET.WTTSTUS1.W')
+dep.ingest(daily_production)
+
+desc = 'US imports of crude oil, monthly'
+
+monthly_imports = EIA_Series('Monthly Imports','PET.MCRIMUS1.M',desc,date_format='%Y%m' )
+dep.ingest(monthly_imports)
+
+
+
+weekly_sales = EIA_Series('Product Sold','PET.WRPUPUS2.W')
+dep.ingest(weekly_sales)
+
+weekly_inventory = EIA_Series('Weekly Inventory','PET.WCRSTUS1.W')
+monthly_rigcount = EIA_Series("Rig Count",'PET.E_ERTRRO_XR0_NUS_C.M')
+
+
+conn = sqlite3.connect('data/energydash.db')
+c = conn.cursor()
+
+df = dep.originals['2000-01-01':]
+df.columns = [x.replace(' ','_') for x in df.columns]
+df.to_sql("original",conn,if_exists='replace')
+
+series = ['PET.RWTC.D','PET.WTTSTUS1.W','PET.MCRIMUS1.M','PET.WRPUPUS2.W']
+for enum,update in enumerate(dict['updates']):
+    if update['series_id'] in series:
+        print(enum, update)
+
+
+import requests
+import json
+
+eia_api_url= 'http://api.eia.gov/updates/?api_key=651b30b69f4f47a13a2912d673f7da93&category_id=241335'
+
+
+request = requests.get(eia_api_url)
+dict = json.loads(request.text)
+
+
+# All table names
+
+res = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+for name in res:
+    print (name[0])
+#delete_table = ['news_merged']
+for name in delete_table:
+    query = 'DROP table {}'.format(name)
+    res = conn.execute(query)

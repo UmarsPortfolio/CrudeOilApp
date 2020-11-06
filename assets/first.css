@@ -141,7 +141,7 @@ body{
     height: 45px;
     border-style:none;
     font-size: 25px;
-    font-family: Helvetica,Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     text-align: left;
     color: #252526 
  
@@ -156,10 +156,10 @@ body{
     width: 100%;
 }
 .DateInput_input {
-    font-size: 18px;
+    font-size: 12px;
     font-weight: 500;
-    width:100%,
-    font-family: 'Roboto Condensed', Helvetica, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    width:100%;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     background-color: #cecccc;
     height:40px;
     border-style: none;
@@ -170,13 +170,24 @@ body{
     width:17cm;
     float:left;
     background-color: #cecccc;
-    height:35px;
-    padding-top: 10px;
+    height:34px;
+    padding-top: 3px;
     padding-left:1%
 
   
 }
 
+.Select-control{
+    background-color: #cecccc
+}
+
+.Select-input{
+    background-color: #cecccc
+}
+
+.Select-clear-zone{
+    background-color: #cecccc
+}
 .check_label{
     font-family: 'Arial Narrow Bold', sans-serif;
     font-size: 18px;
