@@ -218,7 +218,12 @@ def category_frame (dataframe,categ_cols):
 
 def min_max_col (series):
     ''' Scales a given series/column values using min max scaling'''
-    scaled = (series - min(series)) / (max(series) - min(series))
+   
+    if len(series) == 0:
+        scaled = pd.Series([0.5,0.5])
+    else:
+        scaled = (series - min(series)) / (max(series) - min(series))
+        
     return scaled
 
 def df_scaler (dataframe,col_list):

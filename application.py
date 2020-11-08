@@ -87,49 +87,60 @@ def render_content(tab):
 
 def update_value(n_clicks,start_date,end_date,series):      
     
-    conn = sqlite3.connect('data/energydash.db')
-    c = conn.cursor()
-
-    query = '''
-        SELECT * FROM original WHERE original.Date > ? AND original.Date < ?
-     '''
+    chart_data= []
 
     params = (start_date,end_date,)
-
-    df = pd.read_sql_query(query,con=conn,params=params,index_col = 'Date')
-    df = df_scaler(df,list(df.columns))
-
-    chart_data= []
 
     for ser in series:
 
         if ser == 'News':
 
             query2 = '''
-            SELECT * FROM news_merged WHERE news_merged.date_col > ? AND news_merged.date_col < ?
+            SELECT * FROM news WHERE news.Date > ? AND news.Date < ?
             '''
 
-            params2 = (start_date,end_date,)
-
-            df_news = pd.read_sql_query(query2,con=conn,params=params2)
-            df_news['y_val'] = min_max_col(df_news['Daily_Price']).add(0.1)
+            
+            conn = sqlite3.connect('data/energydash.db')
+            df_news = pd.read_sql_query(query2,con=conn,params=params)
+            df_news['y_val'] = min_max_col(df_news['DailyPrice']).add(0.1)
+            conn.close()
 
             trace = go.Scatter(
-            x = df_news['date_col'],
-            y =  df_news['y_val'],
-            text=df_news['main_headline'],
-            customdata=df_news['url'],
-            mode='markers',
-            hovertext=df_news['abstract'],
-            hoverinfo='text',
-            hovertemplate= news_hover,
-            marker_symbol='diamond-tall',
-            marker=dict(color=' #cecccc')
+                        x = df_news['Date'],
+                        y =  df_news['y_val'],
+                        text=df_news['main_headline'],
+                        customdata=df_news['url'],
+                        mode='markers',
+                        hovertext=df_news['abstract'],
+                        hoverinfo='text',
+                        hovertemplate= news_hover,
+                        marker_symbol='diamond-tall',
+                        marker=dict(color=' #cecccc'),
+                        name='News'
             )
         
 
         else:
-            ser = ser.replace(' ','_')
+            queries ={
+                'DailyPrice':'SELECT Date, DailyPrice FROM DailyPrice',
+                'WeeklyStocks':'SELECT Date, WeeklyStocks FROM WeeklyStocks',
+                'ProductSupplied':'SELECT Date, ProductSupplied FROM ProductSupplied',
+                'DIA_closing':'SELECT Date, DIA_closing FROM DIA'
+
+            }
+            
+            
+            query = queries[ser]
+            conn = sqlite3.connect('data/energydash.db')
+            df = pd.read_sql(query,conn)
+            conn.close()
+            
+            df['Date'] = pd.to_datetime(df['Date'])
+            df.set_index('Date',inplace=True, drop=True)
+            df.sort_index(inplace= True)
+            df = df[start_date:end_date]
+            df[ser] = min_max_col(df[ser])
+
             trace = go.Scatter(
             x = df[ser].index,
             y = df[ser],

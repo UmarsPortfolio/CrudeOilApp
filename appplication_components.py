@@ -11,6 +11,7 @@ import dash_dangerously_set_inner_html as ds
 from datetime import datetime,timedelta
 import pandas as pd
 from datashop.datashop import df_scaler
+from datashop.datashop import min_max_col
 import dash_table
 import dash_bootstrap_components as dbc
 import json
@@ -184,20 +185,23 @@ conn = sqlite3.connect('data/energydash.db')
 c = conn.cursor()
 
 query = '''
-        SELECT * FROM original WHERE original.Date > ? ORDER BY original.Date ASC
+        SELECT Date, DailyPrice 
+        FROM DailyPrice 
+        WHERE DailyPrice.Date > ? 
+        ORDER BY DailyPrice.Date ASC
      '''
 
 params = (start_date,)
 
 df = pd.read_sql_query(query,con=conn,params=params,index_col = 'Date')[start_date:]
-df = df_scaler(df,list(df.columns))
+df['DailyPrice'] = min_max_col(df['DailyPrice'])
 
 line_colors = {
     'News':' #cecccc', 
-    'Daily_Price':' #ebe8e8',
-    'Weekly_Stocks':'#33FF36',
-    'Product_Sold':'#A6D5FB',
-    'Monthly_Imports':'#FF5733'
+    'DailyPrice':' #ebe8e8',
+    'WeeklyStocks':'#33FF36',
+    'ProductSupplied':'#A6D5FB',
+    'DIA_closing':'#FFFF00'
 }
 
 news_hover = '''
@@ -209,10 +213,10 @@ news_hover = '''
 
 trace1 = go.Scatter(
     x = df.index,
-    y = df['Daily_Price'],
+    y = df['DailyPrice'],
     mode='lines',
     name='Daily Price',
-    marker=dict(color=line_colors['Daily_Price'])
+    marker=dict(color=line_colors['DailyPrice'])
 )
 
 chart_data = [trace1]
@@ -237,10 +241,11 @@ fig = go.Figure(data=chart_data,layout = layout)
 
 checkoptions = [
     {'value':'News','label':'News'},
-    {'label':'Daily Price', 'value':'Daily Price'},
-    {'label':'Weekly Stocks','value':'Weekly Stocks'},
-    {'label':'Product Sold', 'value':'Product Sold'},
-    {'value':'Monthly Imports','label':'Monthly Imports'}]
+    {'label':'Daily Price', 'value':'DailyPrice'},
+    {'label':'Weekly Stocks','value':'WeeklyStocks'},
+    {'label':'Product Sold', 'value':'ProductSupplied'},
+    {'label':'DOW Jones','value':'DIA_closing'}
+    ]
 
 date_selector = dcc.DatePickerRange(
             id='date_div',
@@ -253,7 +258,7 @@ date_selector = dcc.DatePickerRange(
 series_selector = dcc.Dropdown(
             id='series_div',
             options=checkoptions,
-            value=['Daily Price'],
+            value=['DailyPrice'],
             className = 'series_div',
             multi = True
             )

@@ -177,3 +177,7 @@ for name in res:
 for name in delete_table:
     query = 'DROP table {}'.format(name)
     res = conn.execute(query)
+
+
+    query = " SELECT MAX(Date) from {}".format(val[0])
+    last_date = conn.execute(query).fetchall()[0][0]
