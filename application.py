@@ -7,7 +7,7 @@ import plotly
 import plotly.graph_objs as go
 import cufflinks as cf
 import sqlite3
-from appplication_components import *
+from application_components import *
 import pandas as pd
 import dash_dangerously_set_inner_html as ds
 from datashop.datashop import df_scaler
