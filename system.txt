@@ -1,0 +1,9 @@
+
+Description=uWsgi instance to serve CrudeOilApp
+After=network.target
+
+[Service]
+User=khan
+Group=www-data
+WorkingDirectory=/home/khan/CrudeOilApp
+Environment="PATH=/home/khan/CrudeOilApp/
