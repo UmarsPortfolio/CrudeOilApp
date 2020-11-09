@@ -157,7 +157,7 @@ def update_value(n_clicks,start_date,end_date,series):
 
 server = app.server
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run_server(debug=True)
 
     print ('running')
 
