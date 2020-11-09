@@ -39,7 +39,7 @@ app.layout = html.Div([
                 selected_style=sel_tab
                 ),
             dcc.Tab(
-                label='Report',
+                label='News',
                 value='report',
                 style=tab_style,
                 selected_style=sel_tab
@@ -51,8 +51,8 @@ app.layout = html.Div([
                 selected_style=sel_tab
                 ),
             dcc.Tab(
-                label='Map',
-                value='map',
+                label='Modeling',
+                value='Modeling',
                 style=tab_style,
                 selected_style=sel_tab
                 )
