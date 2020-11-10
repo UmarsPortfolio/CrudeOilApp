@@ -75,8 +75,6 @@ with open ('data/nyt_jsons/recent.json','w') as new_file:
 #_______________         Create df from JSON
 
 
-path = 'c:/prompt_root/CrudeOilApp'
-relpath = '/data/nyt_jsons/'
 frame = jsons_to_frame(path,relpath,conn)
 
 #_______________         Load news into DF
