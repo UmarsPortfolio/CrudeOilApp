@@ -3,166 +3,172 @@ import math
 import datetime as dt
 import sqlite3
 import pandas as pd
+import time
 
+while True:
 
-path = 'c:/prompt_root/CrudeOilApp'
-relpath = '/data/nyt_api/nyt_jsons/'
+    time.sleep(900)
 
-conn = sqlite3.connect('data/energydash.db')
+    path = 'c:/prompt_root/CrudeOilApp'
+    relpath = '/data/nyt_api/nyt_jsons/'
 
-log_dict = {}
+    conn = sqlite3.connect('data/energydash.db')
 
-#______________________             Update EIA data
-eia_dict = {
-    'PET.WTTSTUS1.W':['WeeklyStocks','235081','%Y%m%d'],
-    'PET.RWTC.D':['DailyPrice','241335','%Y%m%d'],
-    'PET.WRPUPUS2.W':['ProductSupplied','401676','%Y%m%d']
-}
-
-with open ('data/dummy_cache.json','r') as cache_file:
-#with open ('data/cache.json','r') as cache_file:
-    cache_dict = json.load(cache_file)
-
-with open ('data/daily_log.json','r') as cache_file:
-    log_dict = json.load(cache_file)
-
-#_________ Base URL. Requires category ID to return series in that category"
-
-eia_api_url= 'http://api.eia.gov/updates/?api_key=651b30b69f4f47a13a2912d673f7da93&category_id='
-
-
-
-# ________ Get last update time for each series. 
-
-current_eia = {}
-
-for key,val in eia_dict.items():
-
-    #load last recorded update time from cache
-
-    last_update = cache_dict[key]
-
-    # Get update time from API
-
-    url = eia_api_url + val[1] + '&rows=10000'
-    request = requests.get(url)
-    dict = json.loads(request.text)   
-
-    for update in dict['updates']:
-        if update['series_id'] == key:
-            new_update = update['updated']
-
-    #compare both, get updates if needed and add to table
-
-    if new_update > last_update:
-
-        # get last date in dataframe
-        query = " SELECT MAX(Date) from {}".format(val[0])
-        last_date = conn.execute(query).fetchall()[0][0]
-        last_date_eia = dt.datetime.strptime(
-            last_date[:10], '%Y-%m-%d').strftime(val[2])
-        
-        #get new data from EIA
-
-        new_data = EIA_Series(
-            key, 
-            name=val[0],
-            start = last_date_eia,
-            date_format = val[2]).frame
-
-        # filter to make sure last date isnt repeated
-        new_data = new_data[new_data.index > pd.Timestamp(last_date)]
-        
-
-        # Add to log
-        records = new_data.to_dict(orient='records')
-        for record in records:
-            log_dict[val[0]].append(record)
-
-        #append to dataframe        
-        new_data.to_sql(val[0],conn,if_exists='append')   
-
-        # store new update list in cache dict for next round
-
-        cache_dict[key] = new_update
-
-
-##___________________________   Get DOW
-
-url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=DIA&interval=15min&outputsize=full&apikey=' + key
-
-request = requests.get(url)
-
-req_dict = json.loads(request.text)
-
-df = pd.DataFrame.from_dict(req_dict['Time Series (15min)'],orient = 'index')
-df = df.rename(columns={'4. close':'DIA_closing'})
-df['Date'] = df.index
-df['DIA_closing'] = df['DIA_closing'].astype('float')
-df['date_only'] = df['Date'].str.slice(stop=10)
-df.set_index('Date',inplace=True)
-df.index = pd.to_datetime(df.index)
-df.sort_index(inplace=True)
-df = df.rename(columns={'4. close':'DIA_closing'})
-
-query = " SELECT MAX(Date) FROM DIA LIMIT 1"
-last_dia_date = conn.execute(query).fetchall()[0][0]
-df = df[df.index > last_dia_date][['date_only','DIA_closing']]
-
-if len(df) > 0:
-    records = df.to_dict(orient='records')
-    for record in records:
-        log_dict['Dow'].append(record)
-df.to_sql('DIA',conn,if_exists='append')
-
-#_________     Get most recent EIA and Dow values 
-
-last_values = {}
-for key,val in eia_dict.items():
-    query = " SELECT * FROM {} ORDER BY date_only DESC LIMIT 1".format(val[0])
-    df = pd.read_sql(query,conn)
-    dict = df.to_dict(orient='list')
-    last_values[val[0]] = dict[val[0]]
-
-query = " SELECT * FROM DIA ORDER BY Date DESC LIMIT 1"
-df = pd.read_sql(query,conn)
-last_values['DIA_closing'] = df.iloc[0,2]
-
-df_current = pd.DataFrame(last_values)
-
-##__________________________________         Update news
-
-last_archive_date= cache_dict['news_update']	
-end_date = str(dt.datetime.now())
-
-query = 'Oil (Petroleum) and Gasoline'
-
-recents_call = nytResp(last_archive_date,end_date,query)
-
-if recents_call.hits > 0:
-    hits = len(recents_call.frame)                  
-    df_current = pd.concat([df_current] * hits).reset_index()    
     
-    df_news = pd.concat([
-        recents_call.frame,
-        df_current],
-        axis=1)
 
-    records = df_news[['abstract','Date','url']].to_dict(orient='records')
-    for record in records:
-        log_dict['News'].append(record)
+    log_dict = {}
 
-    df_news.to_sql('news',conn,if_exists='append')
+    #______________________             Update EIA data
+    eia_dict = {
+        'PET.WTTSTUS1.W':['WeeklyStocks','235081','%Y%m%d'],
+        'PET.RWTC.D':['DailyPrice','241335','%Y%m%d'],
+        'PET.WRPUPUS2.W':['ProductSupplied','401676','%Y%m%d']
+    }
 
-    #__________  record news updated time
-    news_updated = str(dt.datetime.now())
-    cache_dict['news_update'] = news_updated
+    with open ('data/dummy_cache.json','r') as cache_file:
+    #with open ('data/cache.json','r') as cache_file:
+        cache_dict = json.load(cache_file)
 
-with open ('data/cache.json','w') as cache_file:
-    json.dump(cache_dict,cache_file)
+    with open ('data/daily_log.json','r') as cache_file:
+        log_dict = json.load(cache_file)
 
-with open ('data/daily_log.json','w') as cache_file:
-    json.dump(log_dict,cache_file)
+    #_________ Base URL. Requires category ID to return series in that category"
 
-conn.commit()
-conn.close()
+    eia_api_url= 'http://api.eia.gov/updates/?api_key=651b30b69f4f47a13a2912d673f7da93&category_id='
+
+
+
+    # ________ Get last update time for each series. 
+
+    current_eia = {}
+
+    for key,val in eia_dict.items():
+
+        #load last recorded update time from cache
+
+        last_update = cache_dict[key]
+
+        # Get update time from API
+
+        url = eia_api_url + val[1] + '&rows=10000'
+        request = requests.get(url)
+        dict = json.loads(request.text)   
+
+        for update in dict['updates']:
+            if update['series_id'] == key:
+                new_update = update['updated']
+
+        #compare both, get updates if needed and add to table
+
+        if new_update > last_update:
+
+            # get last date in dataframe
+            query = " SELECT MAX(Date) from {}".format(val[0])
+            last_date = conn.execute(query).fetchall()[0][0]
+            last_date_eia = dt.datetime.strptime(
+                last_date[:10], '%Y-%m-%d').strftime(val[2])
+            
+            #get new data from EIA
+
+            new_data = EIA_Series(
+                key, 
+                name=val[0],
+                start = last_date_eia,
+                date_format = val[2]).frame
+
+            # filter to make sure last date isnt repeated
+            new_data = new_data[new_data.index > pd.Timestamp(last_date)]
+            
+
+            # Add to log
+            records = new_data.to_dict(orient='records')
+            for record in records:
+                log_dict[val[0]].append(record)
+
+            #append to dataframe        
+            new_data.to_sql(val[0],conn,if_exists='append')   
+
+            # store new update list in cache dict for next round
+
+            cache_dict[key] = new_update
+
+
+    ##___________________________   Get DOW
+
+    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=DIA&interval=15min&outputsize=full&apikey=' + key
+
+    request = requests.get(url)
+
+    req_dict = json.loads(request.text)
+
+    df = pd.DataFrame.from_dict(req_dict['Time Series (15min)'],orient = 'index')
+    df = df.rename(columns={'4. close':'DIA_closing'})
+    df['Date'] = df.index
+    df['DIA_closing'] = df['DIA_closing'].astype('float')
+    df['date_only'] = df['Date'].str.slice(stop=10)
+    df.set_index('Date',inplace=True)
+    df.index = pd.to_datetime(df.index)
+    df.sort_index(inplace=True)
+    df = df.rename(columns={'4. close':'DIA_closing'})
+
+    query = " SELECT MAX(Date) FROM DIA LIMIT 1"
+    last_dia_date = conn.execute(query).fetchall()[0][0]
+    df = df[df.index > last_dia_date][['date_only','DIA_closing']]
+
+    if len(df) > 0:
+        records = df.to_dict(orient='records')
+        for record in records:
+            log_dict['Dow'].append(record)
+    df.to_sql('DIA',conn,if_exists='append')
+
+    #_________     Get most recent EIA and Dow values 
+
+    last_values = {}
+    for key,val in eia_dict.items():
+        query = " SELECT * FROM {} ORDER BY date_only DESC LIMIT 1".format(val[0])
+        df = pd.read_sql(query,conn)
+        dict = df.to_dict(orient='list')
+        last_values[val[0]] = dict[val[0]]
+
+    query = " SELECT * FROM DIA ORDER BY Date DESC LIMIT 1"
+    df = pd.read_sql(query,conn)
+    last_values['DIA_closing'] = df.iloc[0,2]
+
+    df_current = pd.DataFrame(last_values)
+
+    ##__________________________________         Update news
+
+    last_archive_date= cache_dict['news_update']	
+    end_date = str(dt.datetime.now())
+
+    query = 'Oil (Petroleum) and Gasoline'
+
+    recents_call = nytResp(last_archive_date,end_date,query)
+
+    if recents_call.hits > 0:
+        hits = len(recents_call.frame)                  
+        df_current = pd.concat([df_current] * hits).reset_index()    
+        
+        df_news = pd.concat([
+            recents_call.frame,
+            df_current],
+            axis=1)
+
+        records = df_news[['abstract','Date','url']].to_dict(orient='records')
+        for record in records:
+            log_dict['News'].append(record)
+
+        df_news.to_sql('news',conn,if_exists='append')
+
+        #__________  record news updated time
+        news_updated = str(dt.datetime.now())
+        cache_dict['news_update'] = news_updated
+
+    with open ('data/cache.json','w') as cache_file:
+        json.dump(cache_dict,cache_file)
+
+    with open ('data/daily_log.json','w') as cache_file:
+        json.dump(log_dict,cache_file)
+
+    conn.commit()
+    conn.close()
