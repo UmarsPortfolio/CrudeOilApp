@@ -4,7 +4,7 @@ import datetime as dt
 import sqlite3
 import pandas as pd
 import time
-
+from common import working_dir
 #while True:
 
     #time.sleep(900)
@@ -12,7 +12,7 @@ import time
     #path = 'c:/prompt_root/CrudeOilApp'
     #relpath = '/data/nyt_api/nyt_jsons/'
 
-conn = sqlite3.connect('data/energydash.db')
+conn = sqlite3.connect(str(working_dir / 'data/energydash.db'))
 
 
 
@@ -25,11 +25,11 @@ eia_dict = {
     'PET.WRPUPUS2.W':['ProductSupplied','401676','%Y%m%d']
 }
 
-with open ('data/dummy_cache.json','r') as cache_file:
-#with open ('data/cache.json','r') as cache_file:
+with open (working_dir / 'data/dummy_cache.json','r') as cache_file:
+#with open (working_dir / 'data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
-with open ('data/daily_log.json','r') as cache_file:
+with open (working_dir / 'data/daily_log.json','r') as cache_file:
     log_dict = json.load(cache_file)
 
 #_________ Base URL. Requires category ID to return series in that category"
@@ -164,10 +164,10 @@ if recents_call.hits > 0:
 
 cache_dict['news_update'] = end_date
 
-with open ('data/cache.json','w') as cache_file:
+with open (working_dir / 'data/cache.json','w') as cache_file:
     json.dump(cache_dict,cache_file)
 
-with open ('data/daily_log.json','w') as cache_file:
+with open (working_dir / 'data/daily_log.json','w') as cache_file:
     json.dump(log_dict,cache_file)
 
 conn.commit()
