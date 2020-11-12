@@ -17,8 +17,8 @@ with open ('data/cache.json','r') as cache_file:
 with open ('data/api_keys.json','r') as cache_file:
     api_keys = json.load(cache_file)
 
-path = 'c:/prompt_root/CrudeOilApp'
-#path = '/home/khan/CrudeOilApp'
+#path = 'c:/prompt_root/CrudeOilApp'
+path = '/home/khan/CrudeOilApp'
 relpath = '/data/nyt_jsons/'
 
     
