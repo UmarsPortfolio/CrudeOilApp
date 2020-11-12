@@ -161,8 +161,8 @@ while True:
         df_news.to_sql('news',conn,if_exists='append')
 
         #__________  record news updated time
-        news_updated = str(dt.datetime.now())
-        cache_dict['news_update'] = news_updated
+    
+    cache_dict['news_update'] = end_date
 
     with open ('data/cache.json','w') as cache_file:
         json.dump(cache_dict,cache_file)
