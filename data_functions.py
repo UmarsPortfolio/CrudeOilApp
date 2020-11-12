@@ -126,6 +126,8 @@ class EIA_Series:
         self.frame['scaled_'+self.name] = min_max_col(self.series)
         self.scaled = self.frame['scaled_'+self.name]
 
+
+
     def chart(self):
         self.fig,self.ax = plt.subplots(figsize=(10,6))
         self.ax.plot(self.frame)

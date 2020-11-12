@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input,Output,State
+import datetime as dtime
 from datetime import datetime as dt
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
@@ -253,7 +254,7 @@ checkoptions = [
 date_selector = dcc.DatePickerRange(
             id='date_div',
             start_date=start_date,
-            end_date= dt.now(),
+            end_date= dtime.date.today(),
             min_date_allowed = dt(2000,1,1),
             className='date_div'
             )

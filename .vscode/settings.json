@@ -8,5 +8,6 @@
             "database": "${workspaceFolder:CrudeOilApp}/data/energydash.db"
         }
     ],
-    "sqltools.useNodeRuntime": true
+    "sqltools.useNodeRuntime": true,
+    "jupyter.jupyterServerType": "local"
 }
