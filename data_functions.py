@@ -12,11 +12,12 @@ from datashop import *
 import datetime as dt
 
 from common import working_dir
+working_dir = str(working_dir) + '/'
 
-with open (working_dir / 'data/cache.json','r') as cache_file:
+with open (working_dir + 'data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
-with open (working_dir / 'data/api_keys.json','r') as cache_file:
+with open (working_dir + 'data/api_keys.json','r') as cache_file:
     api_keys = json.load(cache_file)
 
 #path = 'c:/prompt_root/CrudeOilApp'
@@ -279,8 +280,8 @@ class nytResp():
 def jsons_to_frame(abs_path,rel_path,conn):
     art_list = []
 
-    for file in os.listdir(abs_path + rel_path):
-        with open(working_dir / rel_path / file) as json_file:
+    for file in os.listdir(working_dir + rel_path):
+        with open(working_dir + rel_path + file) as json_file:
             chunk = json.load(json_file)
             for doc in chunk:
                 doc_dict = {
