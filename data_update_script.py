@@ -182,3 +182,5 @@ with open (working_dir + '/' + 'data/daily_log.json','w') as cache_file:
 
 conn.commit()
 conn.close()
+
+print('Update ran on {}. No issues'.format(str(dt.datetime.now())))
