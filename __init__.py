@@ -96,7 +96,7 @@ def update_value(n_clicks,start_date,end_date,series):
         if ser == 'News':
 
             query2 = '''
-            SELECT * FROM news WHERE news.Date > ? AND news.Date < ?
+            SELECT * FROM news WHERE news.Date > ? AND news.Date <= ?
             '''
 
             
