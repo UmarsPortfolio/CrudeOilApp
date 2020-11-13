@@ -263,7 +263,7 @@ def update_value(n_clicks,start_date,end_date,series):
     
 
             conn = sqlite3.connect('data/energydash.db')
-            params = ('2020-10-01','2020-11-12',)
+            
             query2 = '''
             SELECT Date,main_headline,url,abstract, date_only FROM news WHERE news.Date > ? AND news.Date <= ? ORDER BY Date
             '''
