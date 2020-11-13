@@ -152,7 +152,7 @@ recents_call = nytResp(last_archive_date,end_date,query)
 
 if recents_call.hits > 0:
 
-    df_hits = df_hits
+    df_hits = recents_call.frame
 
     query_lastnews = " SELECT * FROM news ORDER BY Date DESC LIMIT 50"
     df_lastnews = pd.read_sql(query_lastnews,conn)
