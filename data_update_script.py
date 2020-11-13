@@ -156,7 +156,7 @@ if recents_call.hits > 0:
 
     query_lastnews = " SELECT * FROM news ORDER BY Date DESC LIMIT 50"
     df_lastnews = pd.read_sql(query_lastnews,conn)
-    df_lastnews = df_lastnews[['Date','abstract''id']]
+    df_lastnews = df_lastnews[['Date','abstract','id']]
 
     df_hits = df_hits[~df_hits['id'].isin(df_lastnews['id'])]
     
