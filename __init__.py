@@ -102,7 +102,7 @@ def update_value(n_clicks,start_date,end_date,series):
             
             conn = sqlite3.connect('data/energydash.db')
             df_news = pd.read_sql_query(query2,con=conn,params=params)
-            df_news['y_val'] = min_max_col(df_news['DailyPrice']).add(0.1)
+            df_news['y_val'] = min_max_col(df_news['DIA_closing']).add(0.1)
             conn.close()
 
             trace = go.Scatter(
