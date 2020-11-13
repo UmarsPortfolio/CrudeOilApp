@@ -94,16 +94,38 @@ def update_value(n_clicks,start_date,end_date,series):
     for ser in series:
 
         if ser == 'News':
+    
 
+            conn = sqlite3.connect('data/energydash.db')
+            params = ('2020-10-01','2020-11-12',)
             query2 = '''
-            SELECT * FROM news WHERE news.Date > ? AND news.Date <= ?
+            SELECT Date,main_headline,url,abstract, date_only FROM news WHERE news.Date > ? AND news.Date <= ? ORDER BY Date
             '''
 
-            
-            conn = sqlite3.connect('data/energydash.db')
+            query3 = '''
+            SELECT * FROM DIA WHERE DIA.Date > ? AND DIA.Date <= ? ORDER BY Date
+            '''
+
             df_news = pd.read_sql_query(query2,con=conn,params=params)
+            df_dia = pd.read_sql_query(query3,con=conn,params=params)
+
+            df_dia['Date'] = pd.to_datetime(df_dia['Date'])
+            df_dia.set_index('Date',inplace=True, drop=True)
+            df_dia.sort_index(inplace= True)
+            df_dia = df_dia.resample('D').max()
+            df_dia['DIA_closing'].fillna(method='ffill',inplace=True)
+            df_dia.dropna(inplace=True)
+
+
+
+            df_news = df_news.merge(
+                df_dia,
+                how='left',
+                on='date_only'
+            )
+
+            df_news['DIA_closing'].fillna(method='ffill',inplace=True)
             df_news['y_val'] = min_max_col(df_news['DIA_closing']).add(0.1)
-            conn.close()
 
             trace = go.Scatter(
                         x = df_news['Date'],

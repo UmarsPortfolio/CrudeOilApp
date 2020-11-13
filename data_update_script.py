@@ -140,29 +140,41 @@ df_current = pd.DataFrame(last_values)
 
 ##__________________________________         Update news
 
-last_archive_date= cache_dict['news_update']	
 query = " SELECT MAX(Date) FROM news LIMIT 1"
-end_date = conn.execute(query).fetchall()[0][0]
-end_date = str(end_date)
+last_archive_date = str(conn.execute(query).fetchall()[0][0])
+
+end_date = str(dtime.datetime.today().date())
 
 query = 'Oil (Petroleum) and Gasoline'
 
 recents_call = nytResp(last_archive_date,end_date,query)
 
 if recents_call.hits > 0:
-    hits = len(recents_call.frame)                  
-    df_current = pd.concat([df_current] * hits).reset_index()    
+
+    df_hits = df_hits
+
+    query_lastnews = " SELECT * FROM news ORDER BY Date DESC LIMIT 50"
+    df_lastnews = pd.read_sql(query_lastnews,conn)
+    df_lastnews = df_lastnews[['Date','abstract''id']]
+
+    df_hits = df_hits[~df_hits['id'].isin(df_lastnews['id'])]
     
-    df_news = pd.concat([
-        recents_call.frame,
-        df_current],
-        axis=1)
+    
+    hits = len(df_hits)   
 
-    records = df_news[['abstract','Date','url']].to_dict(orient='records')
-    for record in records:
-        log_dict['News'].append(record)
+    if hits > 0:               
+        df_current = pd.concat([df_current] * hits).reset_index()    
+        
+        df_news = pd.concat([
+            df_hits,
+            df_current],
+            axis=1)
 
-    df_news.to_sql('news',conn,if_exists='append')
+        records = df_news[['abstract','Date','url']].to_dict(orient='records')
+        for record in records:
+            log_dict['News'].append(record)
+
+        df_news.to_sql('news',conn,if_exists='append')
 
     #__________  record news updated time
 
