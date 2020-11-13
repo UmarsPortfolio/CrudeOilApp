@@ -141,7 +141,9 @@ df_current = pd.DataFrame(last_values)
 ##__________________________________         Update news
 
 last_archive_date= cache_dict['news_update']	
-end_date = str(dt.datetime.now())
+query = " SELECT MAX(Date) FROM news LIMIT 1"
+end_date = conn.execute(query).fetchall()[0][0]
+end_date = str(end_date)
 
 query = 'Oil (Petroleum) and Gasoline'
 
