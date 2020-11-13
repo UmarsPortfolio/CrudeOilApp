@@ -5,6 +5,7 @@ import sqlite3
 import pandas as pd
 import time
 from common import working_dir
+import datetime as dt
 #while True:
 
     #time.sleep(900)
@@ -143,7 +144,7 @@ df_current = pd.DataFrame(last_values)
 query = " SELECT MAX(Date) FROM news LIMIT 1"
 last_archive_date = str(conn.execute(query).fetchall()[0][0])
 
-end_date = str(dtime.datetime.today().date())
+end_date = str(dt.datetime.now())
 
 query = 'Oil (Petroleum) and Gasoline'
 
