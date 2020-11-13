@@ -254,7 +254,7 @@ checkoptions = [
 date_selector = dcc.DatePickerRange(
             id='date_div',
             start_date=start_date,
-            end_date= dtime.date.today(),
+            end_date= str(dtime.datetime.today().date()),
             min_date_allowed = dt(2000,1,1),
             className='date_div'
             )
