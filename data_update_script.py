@@ -163,18 +163,12 @@ if recents_call.hits > 0:
     hits = len(df_hits)   
 
     if hits > 0:               
-        df_current = pd.concat([df_current] * hits).reset_index()    
         
-        df_news = pd.concat([
-            df_hits,
-            df_current],
-            axis=1)
-
-        records = df_news[['abstract','Date','url']].to_dict(orient='records')
+        records = df_hits[['abstract','Date','url']].to_dict(orient='records')
         for record in records:
             log_dict['News'].append(record)
 
-        df_news.to_sql('news',conn,if_exists='append')
+        df_hits.to_sql('news',conn,if_exists='append')
 
     #__________  record news updated time
 
