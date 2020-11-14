@@ -114,7 +114,7 @@ df.index = pd.to_datetime(df.index)
 df.sort_index(inplace=True)
 df = df.rename(columns={'4. close':'DIA_closing'})
 
-query = " SELECT MAX(Date) FROM DIA LIMIT 1"
+query = " SELECT MAX(Date) FROM DIA_closing LIMIT 1"
 last_dia_date = conn.execute(query).fetchall()[0][0]
 df = df[df.index > last_dia_date][['date_only','DIA_closing']]
 
@@ -133,7 +133,7 @@ for key,val in eia_dict.items():
     dict = df.to_dict(orient='list')
     last_values[val[0]] = dict[val[0]]
 
-query = " SELECT * FROM DIA ORDER BY Date DESC LIMIT 1"
+query = " SELECT * FROM DIA_closing ORDER BY Date DESC LIMIT 1"
 df = pd.read_sql(query,conn)
 last_values['DIA_closing'] = df.iloc[0,2]
 

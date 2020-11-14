@@ -169,16 +169,21 @@ def render_content(tab):
             xaxis = {
                 'title':'Time',
                 'showgrid':False,
-                'showspikes':True
+                'showspikes':True,
+                'color':'#ebe8e8',
+                'showline':False
+
+                
                 
             },
             yaxis = {
-                'showgrid':False
+                'showgrid':False,
+                'visible':False
             },
             plot_bgcolor = '#252526',
             paper_bgcolor = '#252526',
             autosize=True,
-            hovermode = 'closest'
+            hovermode = 'closest',
         )
 
         fig = go.Figure(data=chart_data,layout = layout)
@@ -260,7 +265,14 @@ def update_value(n_clicks,start_date,end_date,series):
     for ser in series:
 
         if ser == 'News':
-    
+            
+            if len(series) == 1:
+                anchor='DIA_closing'
+            else:
+                if series[0] != 'News':
+                    anchor = series[0]
+                else:
+                    anchor= series[1]
 
             conn = sqlite3.connect('data/energydash.db')
             
@@ -269,29 +281,29 @@ def update_value(n_clicks,start_date,end_date,series):
             '''
 
             query3 = '''
-            SELECT * FROM DIA WHERE DIA.Date > ? AND DIA.Date <= ? ORDER BY Date
-            '''
+            SELECT * FROM {} WHERE {}.Date > ? AND {} <= ? ORDER BY Date
+            '''.format(anchor,anchor,anchor)
 
             df_news = pd.read_sql_query(query2,con=conn,params=params)
-            df_dia = pd.read_sql_query(query3,con=conn,params=params)
+            df_anchor = pd.read_sql_query(query3,con=conn,params=params)
 
-            df_dia['Date'] = pd.to_datetime(df_dia['Date'])
-            df_dia.set_index('Date',inplace=True, drop=True)
-            df_dia.sort_index(inplace= True)
-            df_dia = df_dia.resample('D').max()
-            df_dia['DIA_closing'].fillna(method='ffill',inplace=True)
-            df_dia.dropna(inplace=True)
+            df_anchor['Date'] = pd.to_datetime(df_anchor['Date'])
+            df_anchor.set_index('Date',inplace=True, drop=True)
+            df_anchor.sort_index(inplace= True)
+            df_anchor = df_anchor.resample('D').max()
+            df_anchor[anchor].fillna(method='ffill',inplace=True)
+            df_anchor.dropna(inplace=True)
 
 
 
             df_news = df_news.merge(
-                df_dia,
+                df_anchor,
                 how='left',
                 on='date_only'
             )
 
-            df_news['DIA_closing'].fillna(method='ffill',inplace=True)
-            df_news['y_val'] = min_max_col(df_news['DIA_closing']).add(0.1)
+            df_news[anchor].fillna(method='ffill',inplace=True)
+            df_news['y_val'] = min_max_col(df_news[anchor]).add(0.1)
 
             trace = go.Scatter(
                         x = df_news['Date'],
@@ -308,15 +320,20 @@ def update_value(n_clicks,start_date,end_date,series):
             )
         
 
+
         else:
             queries ={
                 'DailyPrice':'SELECT Date, DailyPrice FROM DailyPrice',
                 'WeeklyStocks':'SELECT Date, WeeklyStocks FROM WeeklyStocks',
                 'ProductSupplied':'SELECT Date, ProductSupplied FROM ProductSupplied',
-                'DIA_closing':'SELECT Date, DIA_closing FROM DIA'
+                'DIA_closing':'SELECT Date, DIA_closing FROM DIA_closing'
 
             }
             
+            series_hover = '''
+            <b>%{x}</b><br>
+            %{text}<br><br>
+            '''
             
             query = queries[ser]
             conn = sqlite3.connect('data/energydash.db')
@@ -327,17 +344,42 @@ def update_value(n_clicks,start_date,end_date,series):
             df.set_index('Date',inplace=True, drop=True)
             df.sort_index(inplace= True)
             df = df[start_date:end_date]
-            df[ser] = min_max_col(df[ser])
+            df[ser +'scaled'] = min_max_col(df[ser])
 
             trace = go.Scatter(
             x = df[ser].index,
-            y = df[ser],
+            y = df[ser +'scaled'],
+            text=df[ser],
+            hovertemplate=series_hover,
             mode='lines',
             name=ser,
             line_color = line_colors[ser]
             )
 
         chart_data.append(trace)
+
+
+    layout = go.Layout(
+            xaxis = {
+                'title':'Time',
+                'showgrid':False,
+                'showspikes':True,
+                'color':'#ebe8e8',
+                'showline':False
+
+                
+                
+            },
+            yaxis = {
+                'showgrid':False,
+                'visible':False
+            },
+            plot_bgcolor = '#252526',
+            paper_bgcolor = '#252526',
+            autosize=True,
+            hovermode = 'closest',
+        )
+
 
     fig = go.Figure(data=chart_data,layout = layout)
 

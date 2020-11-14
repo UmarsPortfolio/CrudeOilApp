@@ -55,7 +55,7 @@ df['Date'] = df['Date'].apply(lambda x: x + ' 16:00:00')
 df.set_index('Date',inplace=True)
 df.sort_index()
 df = df[df.index < last_dow_date]
-df[['date_only','DIA_closing']].to_sql('DIA',conn,if_exists='replace')
+df[['date_only','DIA_closing']].to_sql('DIA_closing',conn,if_exists='replace')
 
 ##################  _____________________________________           New York Times build
 
@@ -94,7 +94,7 @@ for key,val in eia_dict.items():
 
 #_______________         Load Dow into DFs
 
-query = 'SELECT date_only,DIA_closing FROM DIA'
+query = 'SELECT date_only,DIA_closing FROM DIA_closing'
 df_dia=pd.read_sql(query,conn)
 eia_frame.append(df_dia)
 
