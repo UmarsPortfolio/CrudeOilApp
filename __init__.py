@@ -182,6 +182,13 @@ def render_content(tab):
             paper_bgcolor = '#252526',
             autosize=True,
             hovermode = 'closest',
+            legend = dict(
+                orientation='h',
+                x=0.5,
+                y=1,
+                font=dict(
+                color='#ebe8e8'
+                )
         )
 
         fig = go.Figure(data=chart_data,layout = layout)
