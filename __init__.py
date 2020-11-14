@@ -189,7 +189,7 @@ def render_content(tab):
                 font=dict(
                 color='#ebe8e8'
                 )
-        )
+        ))
 
         fig = go.Figure(data=chart_data,layout = layout)
 
