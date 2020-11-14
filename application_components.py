@@ -239,6 +239,7 @@ layout = go.Layout(
     paper_bgcolor = '#252526',
     autosize=True,
     hovermode = 'closest'
+    
 )
 
 fig = go.Figure(data=chart_data,layout = layout)

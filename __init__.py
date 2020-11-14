@@ -167,14 +167,12 @@ def render_content(tab):
 
         layout = go.Layout(
             xaxis = {
-                'title':'Time',
+                'gridwidth':0.01,
+                'gridcolor':'#ebe8e8',
                 'showgrid':False,
                 'showspikes':True,
                 'color':'#ebe8e8',
-                'showline':False
-
-                
-                
+                'showline':False,               
             },
             yaxis = {
                 'showgrid':False,
@@ -361,14 +359,12 @@ def update_value(n_clicks,start_date,end_date,series):
 
     layout = go.Layout(
             xaxis = {
-                'title':'Time',
+                'gridwidth':0.01,
+                'gridcolor':'#ebe8e8',
                 'showgrid':False,
                 'showspikes':True,
                 'color':'#ebe8e8',
-                'showline':False
-
-                
-                
+                'showline':False,               
             },
             yaxis = {
                 'showgrid':False,
@@ -378,6 +374,14 @@ def update_value(n_clicks,start_date,end_date,series):
             paper_bgcolor = '#252526',
             autosize=True,
             hovermode = 'closest',
+            legend = dict(
+                orientation='h',
+                x=0.5,
+                y=1,
+                font=dict(
+                color='#ebe8e8'
+                )
+            )
         )
 
 
