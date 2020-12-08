@@ -67,8 +67,7 @@ class EIA_Series:
             self.name = id
         else:
             self.name = name
-        
-        self.name = name
+    
         self.desc = desc
         self.scale = scale
         self.date_format = date_format
@@ -81,6 +80,7 @@ class EIA_Series:
         self.request = requests.get(self.query)
         self.series_dict = json.loads(self.request.text)
         self.make_df()
+        
 
     def __getitem__(self,sliced):
         return self.frame[sliced]
@@ -100,7 +100,7 @@ class EIA_Series:
         
         #________        Put it into frame
         self.frame = pd.DataFrame(self.series_list)
-        self.frame.columns=[self.date_col,self.name]     
+        self.frame.columns=[date_col, self.name]     
         
         #______      Convert to datetime and set index
         
@@ -113,14 +113,15 @@ class EIA_Series:
         self.frame.set_index(
             self.date_col,drop=True,inplace=True)        
         self.frame.sort_index(ascending=True,inplace=True)  
-        #self.frame = self.frame.asfreq(freq='B').fillna(method='ffill')
+        self.frame = self.frame.asfreq(freq='D').fillna(method='ffill')
 
         self.frame['date_only'] = self.frame.index.astype('str').str.slice(stop=10)
+   
 
         #______   caputure data as series for convenience attribute
 
         self.series = self.frame.iloc[:,0]    
-
+        
         if self.scale == True:
             self.scaler()
         
