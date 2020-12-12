@@ -154,9 +154,8 @@ class Depot:
 
         if len(self.features) == 0:
             self.originals = self.feature.frame[self.feature.name]
-            self.scaled = self.feature.frame[self.feature.name]
-            self.deltas = self.feature.frame[self.feature.name]
-            self.rolling = self.feature.frame[self.feature.name]
+            self.scaled = self.feature.frame['scaled_'+self.feature.name]
+  
 
         else:
             self.originals = pd.merge_asof(
@@ -173,19 +172,6 @@ class Depot:
                 left_index=True
                 )
 
-            self.deltas = pd.merge_asof(
-                self.deltas,
-                self.feature.frame['delta_'+ self.feature.name],
-                right_index=True,
-                left_index=True
-                )
-
-            self.rolling = pd.merge_asof(
-                self.rolling,
-                self.feature.frame['rolling_'+ self.feature.name],
-                right_index=True,
-                left_index=True
-                )
 
         self.features[self.feature.name] = self.feature
 
