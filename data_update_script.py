@@ -156,7 +156,7 @@ if recents_call.hits > 0:
         
         records = df_hits[['abstract','Date','url']].to_dict(orient='records')
         for record in records:
-            log_dict['News'] = record
+            log_dict['News'] = recordpatientpati
 
         df_hits.to_sql('news',conn,if_exists='append')
 
