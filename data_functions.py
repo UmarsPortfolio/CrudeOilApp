@@ -19,10 +19,10 @@ working_dir = str(Path(os.path.dirname(os.path.realpath(__file__))))
 #from common import working_dir
 #working_dir = str(working_dir) + '/'
 
-with open (working_dir + 'data/cache.json','r') as cache_file:
+with open (working_dir + '/data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
-with open (working_dir + 'data/api_keys.json','r') as cache_file:
+with open (working_dir + '/data/api_keys.json','r') as cache_file:
     api_keys = json.load(cache_file)
 
 #path = 'c:/prompt_root/CrudeOilApp'

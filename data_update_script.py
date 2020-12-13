@@ -17,8 +17,8 @@ eia_dict = {
     'PET.WRPUPUS2.W':['ProductSupplied','401676','%Y%m%d']
 }
 
-with open (working_dir + '/' + 'data/dummy_cache.json','r') as cache_file:
-#with open (working_dir + '/' + 'data/cache.json','r') as cache_file:
+
+with open (working_dir + '/data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
 log_dict = {}
