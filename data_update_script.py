@@ -22,7 +22,7 @@ with open (working_dir + '/data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
 log_dict = {}
-log_dict['Datetime'] = dt.datetime.now()
+log_dict['Datetime'] = str(dt.datetime.now())
 
 #_________ Base URL. Requires category ID to return series in that category"
 
