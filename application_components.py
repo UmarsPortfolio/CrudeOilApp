@@ -78,7 +78,8 @@ mn_text = """
     
     ### Report:
     ---
-    All the latest news, price data, inventory levels and other juicy data. 
+    All the latest news petroleum related news, fresh from the New York Times.
+    Updated every 15 minutes during UTC business hours.  
       
         
           
@@ -100,17 +101,19 @@ mn_text = """
       
     *Weekly Inventory Level*  
       
-    *Consumptions*  
+    *Product Supplied*  
       
     *DOW Jones Industrial Average*  
       
     *News Headlines*  
       
-    ### Map
+    ### Model
     ---
 
       
-      A map showing regional proudction levels and gas prices
+      Jupyter notebook that describes trends and seasonality inherent to crude oil prices,
+      explores relationships between price and other variables using Granger causality 
+      and builds models to predict price movements. 
 
 
 

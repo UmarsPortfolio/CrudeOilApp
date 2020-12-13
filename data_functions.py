@@ -11,8 +11,13 @@ import dash_html_components as html
 from datashop import *
 import datetime as dt
 
-from common import working_dir
-working_dir = str(working_dir) + '/'
+import os
+from pathlib import Path
+
+working_dir = str(Path(os.path.dirname(os.path.realpath(__file__))))
+
+#from common import working_dir
+#working_dir = str(working_dir) + '/'
 
 with open (working_dir + 'data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)

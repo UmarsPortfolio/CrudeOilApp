@@ -78,16 +78,17 @@ def render_content(tab):
 
         news_update = cache_dict['news_update']
 
-        query = 'SELECT date,abstract,url FROM news ORDER BY date DESC LIMIT 10'
+        query = 'SELECT date,main_headline,url FROM news ORDER BY date DESC LIMIT 10'
 
         df_news = pd.read_sql_query(query,conn)
+        df_news.columns = ['Date','Headline','URL']
 
         def makelink(url):
             link = html.A(html.P('Full Article'),href=url,target = '_blank')
             return link
             
-        df_news['hlinks']= df_news['url'].apply(makelink)
-        df_news.drop('url',axis=1,inplace= True)
+        df_news['Link']= df_news['URL'].apply(makelink)
+        df_news.drop('URL',axis=1,inplace= True)
 
         news_bar = html.Div(
             children=[
@@ -252,7 +253,10 @@ def render_content(tab):
 
         return chart
     
-    
+    elif tab == 'Modeling':
+        ds_html = html.Img(src=app.get_asset_url('modeling.png'))
+
+        return ds_html
 
 
 @app.callback (Output(component_id='main-graph',component_property='figure'),

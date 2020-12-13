@@ -1,25 +1,14 @@
-with from data_functions import *
+from data_functions import *
 import math
 import datetime as dt
 import sqlite3
 import pandas as pd
 import time
-from common import working_dir
+#from common import working_dir
 import datetime as dt
-#while True:
-
-    #time.sleep(900)
-
-    #path = 'c:/prompt_root/CrudeOilApp'
-    #relpath = '/data/nyt_api/nyt_jsons/'
-
-working_dir = str(working_dir)
 
 conn = sqlite3.connect(working_dir + '/data/energydash.db')
 
-
-
-log_dict = {}
 
 #______________________             Update EIA data
 eia_dict = {
@@ -32,8 +21,8 @@ with open (working_dir + '/' + 'data/dummy_cache.json','r') as cache_file:
 #with open (working_dir + '/' + 'data/cache.json','r') as cache_file:
     cache_dict = json.load(cache_file)
 
-with open (working_dir + '/' + 'data/daily_log.json','r') as cache_file:
-    log_dict = json.load(cache_file)
+log_dict = {}
+log_dict['Datetime'] = dt.datetime.now()
 
 #_________ Base URL. Requires category ID to return series in that category"
 
@@ -178,7 +167,7 @@ cache_dict['news_update'] = end_date
 with open (working_dir + '/' + 'data/cache.json','w') as cache_file:
     json.dump(cache_dict,cache_file)
 
-with open (working_dir + '/' + 'data/daily_log.json','w') as cache_file:
+with open (working_dir + '/' + 'data/daily_log.json','a') as cache_file:
     json.dump(log_dict,cache_file)
 
 conn.commit()
