@@ -75,7 +75,7 @@ for key,val in eia_dict.items():
         # Add to log
         records = new_data.to_dict(orient='records')
         for record in records:
-            log_dict[val[0]].append(record)
+            log_dict[val[0]] = record
 
         #append to dataframe        
         new_data.to_sql(val[0],conn,if_exists='append')   
@@ -110,7 +110,7 @@ df = df[df.index > last_dia_date][['date_only','DIA_closing']]
 if len(df) > 0:
     records = df.to_dict(orient='records')
     for record in records:
-        log_dict['Dow'].append(record)
+        log_dict['Dow'] = record
 df.to_sql('DIA',conn,if_exists='append')
 
 #_________     Get most recent EIA and Dow values 
@@ -156,7 +156,7 @@ if recents_call.hits > 0:
         
         records = df_hits[['abstract','Date','url']].to_dict(orient='records')
         for record in records:
-            log_dict['News'].append(record)
+            log_dict['News'] = record
 
         df_hits.to_sql('news',conn,if_exists='append')
 
