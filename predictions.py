@@ -3,7 +3,7 @@ from data_functions import *
 
 import pprint as pp
 
-import chart_studio.plotly as py
+#import chart_studio.plotly as py
 
 import plotly.offline as pyo
 import plotly.graph_objs as go
