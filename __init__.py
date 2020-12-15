@@ -146,7 +146,8 @@ def render_content(tab):
             'DailyPrice':' #ebe8e8',
             'WeeklyStocks':'#33FF36',
             'ProductSupplied':'#A6D5FB',
-            'DIA_closing':'#FFFF00'
+            'DIA_closing':'#FFFF00',
+            'Predicted': '#FF0000'
         }
 
         news_hover = '''
@@ -199,7 +200,8 @@ def render_content(tab):
             {'label':'Daily Price', 'value':'DailyPrice'},
             {'label':'Weekly Stocks','value':'WeeklyStocks'},
             {'label':'Product Sold', 'value':'ProductSupplied'},
-            {'label':'DOW Jones','value':'DIA_closing'}
+            {'label':'DOW Jones','value':'DIA_closing'},
+            {'label':'Predicted','value':'Predicted'}
             ]
 
         date_selector = dcc.DatePickerRange(
@@ -335,9 +337,15 @@ def update_value(n_clicks,start_date,end_date,series):
                 'DailyPrice':'SELECT Date, DailyPrice FROM DailyPrice',
                 'WeeklyStocks':'SELECT Date, WeeklyStocks FROM WeeklyStocks',
                 'ProductSupplied':'SELECT Date, ProductSupplied FROM ProductSupplied',
-                'DIA_closing':'SELECT Date, DIA_closing FROM DIA_closing'
+                'DIA_closing':'SELECT Date, DIA_closing FROM DIA_closing',
+                'Predicted':'SELECT Date,Predicted FROM Prediction'
 
             }
+
+            if ser == 'Predicted':
+                line_mode = {'dash':'dash'}
+            else:
+                line_mode = {'dash':'solid'}
             
             series_hover = '''
             <b>%{x}</b><br>
@@ -362,7 +370,8 @@ def update_value(n_clicks,start_date,end_date,series):
             hovertemplate=series_hover,
             mode='lines',
             name=ser,
-            line_color = line_colors[ser]
+            line_color = line_colors[ser],
+            line=line_mode
             )
 
         chart_data.append(trace)

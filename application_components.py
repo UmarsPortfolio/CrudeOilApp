@@ -208,7 +208,8 @@ line_colors = {
     'DailyPrice':' #ebe8e8',
     'WeeklyStocks':'#33FF36',
     'ProductSupplied':'#A6D5FB',
-    'DIA_closing':'#FFFF00'
+    'DIA_closing':'#FFFF00',
+    'Predicted':'#FF0000'
 }
 
 news_hover = '''
@@ -252,7 +253,8 @@ checkoptions = [
     {'label':'Daily Price', 'value':'DailyPrice'},
     {'label':'Weekly Stocks','value':'WeeklyStocks'},
     {'label':'Product Sold', 'value':'ProductSupplied'},
-    {'label':'DOW Jones','value':'DIA_closing'}
+    {'label':'DOW Jones','value':'DIA_closing'},
+    {'label':'Predicted','value':'Predicted'}
     ]
 
 date_selector = dcc.DatePickerRange(
