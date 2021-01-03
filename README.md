@@ -4,6 +4,8 @@ The purpose of this project twofold:
 
 1. to develop a model that can accurately predict movements in the spot price of crude oil and serve a live updating web based dashboard displaying the latest price, supply and demand data as well as the latest crude oil related news. 
 
+The dashboard is live and can be accessed at texasanalytics.org.
+
 2. To create a model to predict movements in oil prices. 
 
 
