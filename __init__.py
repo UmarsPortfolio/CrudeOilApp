@@ -22,8 +22,6 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app=dash.Dash(__name__)
 app.title = "Crude Oil Dashboard"
 
-
-
 app.layout = html.Div([
     title_div,
     dcc.Tabs(
